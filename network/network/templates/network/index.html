@@ -1,0 +1,42 @@
+{% extends "network/layout.html" %}
+{% load static %}
+
+{% block body %}
+
+<div id="addpost">
+<form action="{% url 'addpost' %}" method="post">
+{% csrf_token %}
+<textarea class="form-control" name="content" id="post-text" placeholder="text"></textarea>
+<input class="form-control" id="submitPost" type="submit">
+</form>
+</div>
+
+<div id="profiledetail">
+</div>
+
+
+<div id="posts">
+    <nav aria-label="Page navigation example">
+        <ul id="pagination" class="pagination">
+        </ul>
+        </nav> 
+</div>
+
+<div id="inpost"></div>
+<div id="inprofile"></div>
+        
+
+
+
+
+
+
+{% endblock %}
+
+
+
+
+
+{% block script %}
+    <script src="{% static 'network/inbox.js' %}"></script>
+{% endblock %}
