@@ -1,0 +1,92 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <h2>Listing</h2>
+
+    <div >
+        {{inside.product}}
+        <br>
+        {% if inside.image %}
+        <img src="{{inside.image}}" style=" height:300px;
+        width: 300px;">
+        {% else %}
+        <img src="https://media.istockphoto.com/vectors/default-image-icon-vector-missing-picture-page-for-website-design-or-vector-id1357365823?k=20&m=1357365823&s=612x612&w=0&h=ZH0MQpeUoSHM3G2AWzc8KkGYRg4uP_kuu0Za8GFxdFc=" style=" height:300px;
+        width: 300px;">
+        {% endif %}
+        <br>
+
+        {{inside.description}}
+        <br>
+        {% if inside.last_bid %}
+            ${{inside.last_bid}}
+        {% else %}
+            ${{inside.og_bid}}
+        {% endif %}
+
+
+    </div>
+
+
+    <div>
+        <form action="{% url 'watchadd' inside.id %}" method="post">
+        {% csrf_token %}
+        {% if N == False %}
+        <input type="submit" class="btn btn-primary" value="Add to Watchlist">
+        {% elif N == True %}
+        <input type="submit" class="btn btn-primary" value="Cancel Watchlist">
+        {% endif %}
+        </form>
+    </div>
+
+
+
+
+
+
+    <div>
+        
+        <form action="{% url 'addbid' inside.id %}" method="post">
+            {% csrf_token %}
+            {% if inside.status == True %}
+            <input type="number" name="bid" placeholder="enter bid">
+            <button class="btn btn-primary">Submit</button>
+            {% else %}
+            <input disabled="disabled" type="number" name="bid" placeholder="enter bid">
+            <button class="btn btn-primary" disabled="disabled">Submit</button>
+            {% endif %}
+        </form>
+        
+    </div>
+
+
+    <div>
+        <form action="{% url 'addcomment' inside.id %}" method="post">
+            {% csrf_token %}
+            <input type="text" name="comment" placeholder="enter comment">
+            <button class="btn btn-primary">Post</button>           
+        </form>
+
+        {% for i in inside.comment.all %}
+        <br>{{i.user}}:{{i.content}}</br>
+        {% endfor %}
+    </div>
+
+    <div>
+        {% if request.user == inside.user %}
+            <form action="{% url 'inpage' inside.id %}" method="post">
+                {% if inside.status == True %}
+                <button type="submit" class="btn btn-primary">close the bid</button>
+                {% csrf_token %}
+                {% else %}
+                <button disabled="disabled" class="btn btn-primary">bid closed</button>
+                {% endif %}
+        {% endif %}
+
+        {% if request.user.username == inside.user and inside.status == False %}
+        <h1>You win this item!!!</h1>
+        {% elif request.user.user != inside.user and inside.status == False %}
+        <h1>{{inside.winner}} win this item!</h1>
+        {% endif %}
+            </form>
+    </div>
+    {% endblock %}

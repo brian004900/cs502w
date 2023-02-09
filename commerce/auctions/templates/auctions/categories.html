@@ -1,0 +1,10 @@
+{% extends "auctions/layout.html" %}
+
+
+{% block body %}
+
+{% for i in catelist %}
+<a class="btn btn-primary" href="{% url 'incategories' i %}">{{i}}</a>
+{% endfor %}
+
+{% endblock %}
